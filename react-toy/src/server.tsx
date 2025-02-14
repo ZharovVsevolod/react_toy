@@ -1,10 +1,9 @@
 // To run this server app:
 // npm install tsx
-// npm tsx scr/server.tsx
+// npx tsx scr/server.tsx
 
 import { WebSocket, WebSocketServer } from 'ws';
 import axios from 'axios';
-import { useState } from 'react';
 
 // Some config constants
 const apiUrl = "http://localhost:1702/ask";
@@ -12,11 +11,15 @@ const WebSocketPort = 8080;
 
 
 const wss = new WebSocketServer({ port: WebSocketPort });
-const [answer, setAnswer] = useState("");
+let answer = "placeholder";
 
-function getApiAnswer(userMessage: string) {
-    axios.get(`${apiUrl}?q=${userMessage}`)
-        .then(responce => { setAnswer(responce.data) }).catch(error => { console.error(error) });
+async function getApiAnswer(userMessage: string) {
+    let responce = await axios.get(`${apiUrl}?question=${userMessage}`);
+
+    answer = responce.data.message;
+    console.log(`Log in responce: ${answer}`);
+
+    return answer
 };
 
 // ---------------
@@ -24,12 +27,11 @@ function getApiAnswer(userMessage: string) {
 wss.on('connection', (ws: WebSocket) => {
     console.log('New client connected');
 
-    ws.on('message', (message: string) => {
+    ws.on('message', async (message: string) => {
         console.log(`Received message: ${message}`);
 
-        // ws.send(`Follow the white rabbit.`);
-
-        getApiAnswer(message);
+        answer = await getApiAnswer(message)
+        console.log(`Message from python: ${answer}`)
         ws.send(answer);
     });
 
