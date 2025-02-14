@@ -42,7 +42,7 @@ function App() {
         console.log(`Send button! Message is: ${input}`);
         if (ws.current !== null){
             ws.current.send(input); // Send message through WebSocket
-        }
+        };
         setInput(''); // Clear input field
     };
 
