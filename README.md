@@ -1,5 +1,5 @@
 # Toy project
-Toy project for 101 and getting started with React, TypeScript, WebScoket and API connection, etc.
+Toy project for 101 and getting started with React, TypeScript, WebSocket and API connection, etc.
 
 ## Useful links
 [Youtube video 101](https://www.youtube.com/watch?v=SqcY0GlETPk&t)
