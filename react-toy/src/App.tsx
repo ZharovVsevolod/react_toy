@@ -4,11 +4,11 @@ import Message from "./components/Message";
 import { useState, useRef, useEffect } from "react";
 
 function App() {
-    const ipAddress = "ws://localhost:8080"
+    const ipAddress = "ws://localhost:8080";
 
     const ws = useRef<WebSocket | null>(null);
     const [messageToShow, setMessageToShow] = useState(<h1>Hello there</h1>);
-    const [input, setInput] = useState('');
+    const [input, setInput] = useState("");
 
     function setupWebSocket() {
         ws.current = new WebSocket(ipAddress);
@@ -17,10 +17,10 @@ function App() {
             console.log("WebSocket connected!");
         }) as EventListener;
 
-        ws.current.onmessage = ((message) => {
+        ws.current.onmessage = (message) => {
             setMessageToShow(Message(message.data));
             console.log(messageToShow);
-        });
+        };
 
         ws.current.onerror = (event) => {
             console.error("WebSocket error observed:", event);
@@ -32,19 +32,18 @@ function App() {
         setupWebSocket(); // Setup WebSocket on component mount
     }, []);
 
-
-    function handleInputChange(msg: any){
+    function handleInputChange(msg: any) {
         setInput(msg.target.value);
-    };
+    }
 
-    function handleSubmit(event: { preventDefault: () => void; }){
+    function handleSubmit(event: { preventDefault: () => void }) {
         event.preventDefault();
         console.log(`Send button! Message is: ${input}`);
-        if (ws.current !== null){
+        if (ws.current !== null) {
             ws.current.send(input); // Send message through WebSocket
-        };
-        setInput(''); // Clear input field
-    };
+        }
+        setInput(""); // Clear input field
+    }
 
     return (
         <div>
